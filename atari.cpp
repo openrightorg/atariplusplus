@@ -102,8 +102,6 @@ void Atari::EmulationLoop(void)
   VBITimer->StartTimer(0,usecs);
   missedframes = 0;
   machine->Display()->ShowPointer(false);
-  if (!machine->CheckLicence())
-    return;
   //
   // Loop over captured async events we must handle
   //

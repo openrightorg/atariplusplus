@@ -1014,24 +1014,6 @@ void Machine::ColdStart(void)
 }
 ///
 
-/// Machine::CheckLicence
-// Check whether the user wants to accept the licence conditions.
-bool Machine::CheckLicence(void)
-{
-  if (acceptlicence == false) {
-    class ChoiceRequester *lr = NULL;
-    try {
-      lr = new class ChoiceRequester(this);
-      if (lr->Request(Licence,"Deny","Accept",NULL) == 1) {
-	acceptlicence = true;
-      }
-    } catch(...) { }
-    delete lr;
-  }
-  return acceptlicence;
-}
-///
-
 /// Machine::PokeyPage
 // If we have two pokeys, they cannot get
 // mapped into memory directly, but are rather
