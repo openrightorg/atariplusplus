@@ -647,5 +647,5 @@ fi
 #
 #
 #
-AC_CONFIG_FILES([makefile makefile.icc])
+AC_CONFIG_FILES([Makefile Makefile.icc])
 AC_OUTPUT
