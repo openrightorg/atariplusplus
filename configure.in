@@ -71,7 +71,7 @@ else if test ${ac_compiler_gnu} = yes; then
    # -Winline works for 3.3, but causes unnecessary warnings.
    # -ffast-math breaks with 3.3.1
    AC_SUBST(WARNING_FLAGS,["-Wall -W -Wunused -Wpointer-arith -pedantic -Wcast-qual -Wwrite-strings -Wno-long-long -Wredundant-decls -Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo"])
-   AC_SUBST(OPTIMIZER_FLAGS,["-funroll-loops -fstrict-aliasing -Wno-redundant-decls -fexpensive-optimizations -fstrength-reduce -fgcse -fcse-follow-jumps -fcse-skip-blocks -frerun-cse-after-loop -frerun-loop-opt -fforce-addr"])
+   AC_SUBST(OPTIMIZER_FLAGS,["-funroll-loops -fstrict-aliasing -Wno-redundant-decls -fexpensive-optimizations -fstrength-reduce -fgcse -fforce-addr"])
    AC_SUBST(PROFILER_FLAGS,["-ggdb3 -pg -fno-omit-frame-pointer -fno-inline"])
    AC_SUBST(DEBUGGER_FLAGS,["-ggdb3 -fno-inline"])
  fi
