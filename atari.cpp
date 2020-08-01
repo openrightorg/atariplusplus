@@ -263,14 +263,7 @@ void Atari::EmulationLoop(void)
       }
     }
     if (machine->Quit()) {
-      // Check whether the user really wants to quit.
-      if (YesNoRequester->Request("Do you really want to quit Atari++?",
-				  "Continue Execution","Quit Program",NULL) == 0) {
-	redo = true;
-	machine->Quit() = false;
-      } else {
-	redo = false;
-      }
+      redo = false;
     }
   } while(redo);
 }
