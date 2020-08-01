@@ -63,7 +63,7 @@ SDL_FrontEnd::SDL_FrontEnd(class Machine *mach,int unit)
     LeftEdge(unit?0:16), TopEdge(0), 
     Width(unit?80*8:Antic::WindowWidth), Height(unit?25*8:Antic::WindowHeight),
     PixelWidth(unit?1:2), PixelHeight(2), ShieldCursor(false), 
-    FullScreen(true), DoubleBuffer(false), Deblocking(false),
+    FullScreen(false), DoubleBuffer(false), Deblocking(false),
     Doubler(new UWORD[256]), Quadrupler(new ULONG[256]), Deblocker(NULL)
 {
   int i;
@@ -87,7 +87,7 @@ SDL_FrontEnd::SDL_FrontEnd(class Machine *mach,int unit)
   MouseY          = 0;
   MouseButton     = false;
   MouseSpeedLimit = 1;
-  fullscreen      = true;
+  fullscreen      = false;
 #if defined _WIN32
   // Actually, SDL should do this itself, but doesn't
   // on win.
