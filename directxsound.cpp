@@ -22,7 +22,7 @@
 #include "audiobuffer.hpp"
 #include "unistd.hpp"
 #include "new.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_INITSUBSYSTEM
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INITSUBSYSTEM
 ///
 
 /// DirectXSound::DirectXSound

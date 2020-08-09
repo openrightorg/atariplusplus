@@ -20,7 +20,7 @@ o) Start Visual Studio C++ 7.1
 o) Open the "atari++.vcproj" file; this contains the
 atari++ project settings for the compiler.
 o) Possibly modify the include and library paths for
-the SDL library. For once, SDL/SDL.h must be in the
+the SDL library. For once, SDL2/SDL.h must be in the
 include path (preprocessor settings) and sdl.lib must be
 linked to the binary.
 o) Let the compiler go.

@@ -255,6 +255,12 @@
 /* Define to 1 if you have the `read' function. */
 #undef HAVE_READ
 
+/* Define to 1 if you have the <SDL2/SDL.h> header file. */
+#undef HAVE_SDL2_SDL_H
+
+/* Define to 1 if you have the `SDL_CreateWindow' function. */
+#undef HAVE_SDL_CREATEWINDOW
+
 /* Define to 1 if you have the `SDL_Init' function. */
 #undef HAVE_SDL_INIT
 
@@ -266,12 +272,6 @@
 
 /* Define to 1 if you have the `SDL_OpenAudio' function. */
 #undef HAVE_SDL_OPENAUDIO
-
-/* Define to 1 if you have the <SDL/SDL.h> header file. */
-#undef HAVE_SDL_SDL_H
-
-/* Define to 1 if you have the `SDL_SetVideoMode' function. */
-#undef HAVE_SDL_SETVIDEOMODE
 
 /* Define to 1 if you have the `select' function. */
 #undef HAVE_SELECT

@@ -22,8 +22,8 @@
 #include "colorentry.hpp"
 #include "screendump.hpp"
 #include "sdlclient.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_SETVIDEOMODE
-#include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_CREATEWINDOW
+#include <SDL2/SDL.h>
 #endif
 ///
 
@@ -36,13 +36,14 @@ class KeypadStick;
 
 /// Class SDL_FrontEnd
 // This class offers a graphical frontend using SDL 
-#if HAVE_SDL_SDL_H && HAVE_SDL_SETVIDEOMODE
+#if HAVE_SDL2_SDL_H && HAVE_SDL_CREATEWINDOW
 class SDL_FrontEnd : public AtariDisplay, public SDLClient {
   //
   // Import the packed RGB type.
   typedef AtariDisplay::PackedRGB PackedRGB;
   //
   // Points to the SDL drawing plane
+  SDL_Window    *window;
   SDL_Surface    *screen;
   //
   // This flag gets set as soon as SDL got initialized

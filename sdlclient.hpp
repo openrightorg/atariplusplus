@@ -14,8 +14,8 @@
 /// Includes
 #include "types.h"
 #include "list.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_INITSUBSYSTEM
-#include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INITSUBSYSTEM
+#include <SDL2/SDL.h>
 #endif
 ///
 
@@ -28,7 +28,7 @@ class SDLPort;
 // Any class making use of SDL must be derived fromt this base class.
 // This base keeps care of opening SDL with all the proper parameters
 // and the subsystem flags setup correctly.
-#if HAVE_SDL_SDL_H && HAVE_SDL_INITSUBSYSTEM
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INITSUBSYSTEM
 class SDLClient : public Node<class SDLClient> {
   //
   // Not much data here. This is really just an administration interface class

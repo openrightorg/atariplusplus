@@ -15,8 +15,8 @@
 #ifdef OS2
 # define USE_SDL_TIMER 1
 #endif
-#if HAVE_SDL_SDL_H && USE_SDL_TIMER
-# include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && USE_SDL_TIMER
+# include <SDL2/SDL.h>
 #else
 # ifndef HAS_STRUCT_TIMEVAL
 # endif
@@ -82,7 +82,7 @@ Timer::~Timer(void)
 /// Timer::Timeval::GetTimeOfDay
 void Timer::Timeval::GetTimeOfDay(void)
 {
-#if HAVE_SDL_SDL_H && USE_SDL_TIMER
+#if HAVE_SDL2_SDL_H && USE_SDL_TIMER
   Uint32 ticks;
   // try to use the SDL timer service here.
   // We don't need an absolute timestamp,
@@ -103,7 +103,7 @@ void Timer::Timeval::GetTimeOfDay(void)
 // Wait a specific time
 void Timer::Timeval::Delay(void)
 {
-#if HAVE_SDL_SDL_H && USE_SDL_TIMER
+#if HAVE_SDL2_SDL_H && USE_SDL_TIMER
   Uint32 ticks;
   // compute the ticks from the usec/sec delay counter,
   // round down, i.e. rather wait not LONG enough.
@@ -132,7 +132,7 @@ void Timer::Timeval::Delay(void)
 // I/O returned
 int Timer::Timeval::WaitForOutput(AsyncFileHandle file)
 {
-#if HAVE_SDL_SDL_H && USE_SDL_TIMER
+#if HAVE_SDL2_SDL_H && USE_SDL_TIMER
   return file;
 #elif HAVE_SELECT
   fd_set fileset;

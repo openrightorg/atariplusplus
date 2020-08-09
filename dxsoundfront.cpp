@@ -17,12 +17,12 @@
 #include <dsound.h>
 #include <string.h>
 #include <Windows.h>
-#if HAVE_SDL_SDL_H
+#if HAVE_SDL2_SDL_H
 #ifndef WIN32
 #define WIN32
 #endif
-#include <SDL/SDL_syswm.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL_syswm.h>
+#include <SDL2/SDL.h>
 #endif
 #endif
 #ifndef NULL
@@ -654,7 +654,7 @@ bool DXSound::IsActive(void)
 // return a handle to the current SDL window in case we have it
 void *DXSound::GetSDLWindowHandle(void)
 {
-#if HAVE_SDL_SDL_H && defined(HAVE_DXSOUND)
+#if HAVE_SDL2_SDL_H && defined(HAVE_DXSOUND)
   SDL_SysWMinfo info;
   memset(&info,0,sizeof(info));
   if (SDL_GetWMInfo(&info)) {

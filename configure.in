@@ -190,21 +190,21 @@ if test ${ac_arg_ALSA} = yes; then
 fi
 if test ${ac_arg_SDL} = yes; then
 # SDL requires the libpthread, at least on redhat.
-# Also test whether sdl-config is available. If so, get flags from there
- AC_MSG_CHECKING([whether sdl-config is available])
+# Also test whether sdl12-config is available. If so, get flags from there
+ AC_MSG_CHECKING([whether sdl2-config is available])
  ac_save_CFLAGS="$CFLAGS"
  ac_save_LDFLAGS="$LDFLAGS"
- sdlcmd=`which sdl-config`
+ sdlcmd=`which sdl2-config`
  if test -n "${sdlcmd}"; then
    if test x$hostx = xi386-pc-os2-emxx; then
     sdlcmd=`echo ${sdlcmd} | sed -e 's@\\\\@/@g'`
    fi
    if test -x "${sdlcmd}"; then
     ac_has_sdl_config='yes'
-    SDL_CFLAGS="`sdl-config --cflags`"
-    SDL_LDFLAGS="`sdl-config --libs`"
-    AC_SUBST(SDL_CFLAGS,["`sdl-config --cflags`"])
-    AC_SUBST(SDL_LDFLAGS,["`sdl-config --libs`"])
+    SDL_CFLAGS="`sdl2-config --cflags`"
+    SDL_LDFLAGS="`sdl2-config --libs`"
+    AC_SUBST(SDL_CFLAGS,["`sdl2-config --cflags`"])
+    AC_SUBST(SDL_LDFLAGS,["`sdl2-config --libs`"])
    else
     ac_has_sdl_config=no
    fi
@@ -217,7 +217,7 @@ if test ${ac_arg_SDL} = yes; then
   AC_SEARCH_LIBS([sem_init],[pthread])
   AC_SEARCH_LIBS([SDL_Init],[SDL])
  fi
- AC_CHECK_HEADERS([SDL/SDL.h])
+ AC_CHECK_HEADERS([SDL2/SDL.h])
  CFLAGS="$ac_save_CFLAGS"
  LDFLAGS="$ac_save_LDFLAGS"
 fi
@@ -270,7 +270,7 @@ if test ${ac_arg_SDL} = yes; then
  CFLAGS="$CFLAGS $SDL_CFLAGS"
  LDFLAGS="$LDFLAGS $SDL_LDFLAGS"
  AC_SEARCH_LIBS([SDL_Init],[SDL])
- AC_CHECK_FUNCS([SDL_Init SDL_InitSubSystem SDL_OpenAudio SDL_SetVideoMode SDL_JoystickOpen])
+ AC_CHECK_FUNCS([SDL_Init SDL_InitSubSystem SDL_OpenAudio SDL_CreateWindow SDL_JoystickOpen])
  CFLAGS=$ac_save_CFLAGS
  LDFLAGS=$ac_save_LDFLAGS
  LIBS=$ac_save_LIBS

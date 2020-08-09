@@ -15,14 +15,14 @@
 #include "types.h"
 #include "sdlclient.hpp"
 #include "sound.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_OPENAUDIO
-#include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_OPENAUDIO
+#include <SDL2/SDL.h>
 #endif
 ///
 
 /// Class SDLSound
 // This class implements the interface towards audio output
-#if HAVE_SDL_SDL_H && HAVE_SDL_OPENAUDIO
+#if HAVE_SDL2_SDL_H && HAVE_SDL_OPENAUDIO
 class SDLSound : public Sound, public SDLClient {
   //
   bool             SoundInit;   // set if the sound system is running.

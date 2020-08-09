@@ -15,7 +15,7 @@
 #include "sdlport.hpp"
 #include "sdlclient.hpp"
 #include "sighandler.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT
 ///
 
 /// SDL_Port::SDL_Port

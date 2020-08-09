@@ -17,8 +17,8 @@
 #include "sdlanalog.hpp"
 #include "monitor.hpp"
 #include "exceptions.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_JOYSTICKOPEN
-#include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_JOYSTICKOPEN
+#include <SDL2/SDL.h>
 ///
 
 /// SDLAnalog::SDLAnalog

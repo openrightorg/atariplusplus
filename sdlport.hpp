@@ -14,8 +14,8 @@
 /// Includes
 #include "types.h"
 #include "list.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT
-#include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT
+#include <SDL2/SDL.h>
 #endif
 ///
 
@@ -24,7 +24,7 @@ class SDLClient; // a generic SDL client
 ///
 
 /// Class SDLPort
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT
 // This class registers SDL front-ends, and, as a service opens the SDL
 // library with the proper parameters, specifically SDL_Init
 class SDL_Port {

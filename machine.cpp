@@ -71,7 +71,7 @@
 ///
 
 /// Defines
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_SETVIDEOMODE
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_CREATEWINDOW
 # define USE_SDL_VIDEO 1
 #else
 # define USE_SDL_VIDEO 0
@@ -96,9 +96,9 @@ Machine::Machine(void)
 #else
   soundtype      = Sound_HQ;
 #endif
-#elif HAVE_SDL_SDL_H && defined(HAVE_DXSOUND)
+#elif HAVE_SDL2_SDL_H && defined(HAVE_DXSOUND)
   soundtype      = Sound_DirectX;
-#elif HAVE_SDL_SDL_H && HAVE_SDL_OPENAUDIO
+#elif HAVE_SDL2_SDL_H && HAVE_SDL_OPENAUDIO
   soundtype      = Sound_SDL;
 #else
   soundtype      = Sound_Wav;
@@ -200,7 +200,7 @@ Machine::~Machine(void)
     delete paddles[i];
     delete analogjoysticks[i];
     delete digitaljoysticks[i];
-#if HAVE_SDL_SDL_H && HAVE_SDL_JOYSTICKOPEN
+#if HAVE_SDL2_SDL_H && HAVE_SDL_JOYSTICKOPEN
     delete sdlanalog[i];
     delete sdldigital[i];
 #endif
@@ -209,7 +209,7 @@ Machine::~Machine(void)
   delete sound;
   delete xepdisplay;
   delete display;
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT
   delete sdlport;
 #endif
   delete sioport;
@@ -233,7 +233,7 @@ void Machine::BuildMachine(class ArgParser *args)
   errorlog   = new class ErrorRequester(this);
   //
   // Build the SDL frontend in case we have SDL available.
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT
   sdlport    = new class SDL_Port;
 #endif
   // Build all chips: Note that the order matters for those
@@ -304,7 +304,7 @@ void Machine::BuildMachine(class ArgParser *args)
 #endif
   }
   for(i=0;i<8;i++) {
-#if HAVE_SDL_SDL_H && HAVE_SDL_JOYSTICKOPEN
+#if HAVE_SDL2_SDL_H && HAVE_SDL_JOYSTICKOPEN
     sdlanalog[i] = new class SDLAnalog(this,i);
     if (!sdlanalog[i]->IsAvailable()) {
       delete sdlanalog[i];
@@ -313,7 +313,7 @@ void Machine::BuildMachine(class ArgParser *args)
 #endif
   }
   for(i=0;i<8;i++) {
-#if HAVE_SDL_SDL_H && HAVE_SDL_JOYSTICKOPEN
+#if HAVE_SDL2_SDL_H && HAVE_SDL_JOYSTICKOPEN
     sdldigital[i] = new class SDLDigital(this,i);
     if (!sdldigital[i]->IsAvailable()) {
       delete sdldigital[i];
@@ -562,11 +562,11 @@ void Machine::ParseConfig(class ArgParser *args)
       {"HQOss"  , Sound_HQ   },
       {"Oss"    , Sound_Oss  },
 #endif
-#if HAVE_SDL_SDL_H && defined(HAVE_DXSOUND)
+#if HAVE_SDL2_SDL_H && defined(HAVE_DXSOUND)
       {"DirectX", Sound_DirectX},
 #endif
       {"Wav"    , Sound_Wav  },
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_OPENAUDIO
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_OPENAUDIO
       {"SDL"    , Sound_SDL  },
 #endif
       {NULL     , 0},
@@ -608,7 +608,7 @@ void Machine::ParseConfig(class ArgParser *args)
 #ifdef USE_SOUND
 			"Oss sound driver or "
 #endif
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_OPENAUDIO
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_OPENAUDIO
 			"SDL sound or "
 #endif
 			".wav sample output",
@@ -780,7 +780,7 @@ void Machine::ParseConfig(class ArgParser *args)
       sound = new class WavSound(this);
       break;
     case Sound_SDL:
-#if HAVE_SDL_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_OPENAUDIO
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INIT && HAVE_SDL_INITSUBSYSTEM && HAVE_SDL_OPENAUDIO
       sound = new class SDLSound(this);
 #else
       sound = NULL;
@@ -794,7 +794,7 @@ void Machine::ParseConfig(class ArgParser *args)
 #endif
       break;
     case Sound_DirectX:
-#if HAVE_SDL_SDL_H && defined(HAVE_DXSOUND)
+#if HAVE_SDL2_SDL_H && defined(HAVE_DXSOUND)
       sound = new class DirectXSound(this);
 #else
       sound = NULL;

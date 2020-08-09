@@ -20,8 +20,8 @@
 #include "pokey.hpp"
 #include "string.hpp"
 #include "new.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_OPENAUDIO
-#include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_OPENAUDIO
+#include <SDL2/SDL.h>
 ///
 
 /// SDLSound::SDLSound

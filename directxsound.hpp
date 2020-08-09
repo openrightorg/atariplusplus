@@ -29,7 +29,7 @@ class Monitor;
 
 /// Class DirectXSound
 // This class does all the sound output for us over direct X
-#if HAVE_SDL_SDL_H && HAVE_SDL_INITSUBSYSTEM
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INITSUBSYSTEM
 class DirectXSound : public Sound, public SDLClient {
   //
   // last but not least, the stream of where the sound goes into,

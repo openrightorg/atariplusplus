@@ -14,7 +14,7 @@
 #include "sdlport.hpp"
 #include "machine.hpp"
 #include "list.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_INITSUBSYSTEM
+#if HAVE_SDL2_SDL_H && HAVE_SDL_INITSUBSYSTEM
 ///
 
 /// SDLClient::SDLClient

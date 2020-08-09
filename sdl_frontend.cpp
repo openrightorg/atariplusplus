@@ -21,10 +21,10 @@
 #include "screendump.hpp"
 #include "string.hpp"
 #include "new.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_SETVIDEOMODE
-#include <SDL/SDL.h>
-#include <SDL/SDL_video.h>
-#include <SDL/SDL_keysym.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_CREATEWINDOW
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_surface.h>
 ///
 
 /// SDL_FrontEnd::DiagDeblocker::statics
@@ -142,16 +142,16 @@ void SDL_FrontEnd::CreateDisplay(void)
   KeypadStick->AssociateKey(KeyboardStick::Return       ,SDLK_RETURN);
   KeypadStick->AssociateKey(KeyboardStick::Tab          ,SDLK_TAB);
   KeypadStick->AssociateKey(KeyboardStick::Backspace    ,SDLK_BACKSPACE);
-  KeypadStick->AssociateKey(KeyboardStick::KP_0         ,SDLK_KP0);
-  KeypadStick->AssociateKey(KeyboardStick::KP_1         ,SDLK_KP1);
-  KeypadStick->AssociateKey(KeyboardStick::KP_2         ,SDLK_KP2);
-  KeypadStick->AssociateKey(KeyboardStick::KP_3         ,SDLK_KP3);
-  KeypadStick->AssociateKey(KeyboardStick::KP_4         ,SDLK_KP4);
-  KeypadStick->AssociateKey(KeyboardStick::KP_5         ,SDLK_KP5);
-  KeypadStick->AssociateKey(KeyboardStick::KP_6         ,SDLK_KP6);
-  KeypadStick->AssociateKey(KeyboardStick::KP_7         ,SDLK_KP7);
-  KeypadStick->AssociateKey(KeyboardStick::KP_8         ,SDLK_KP8);
-  KeypadStick->AssociateKey(KeyboardStick::KP_9         ,SDLK_KP9);
+  KeypadStick->AssociateKey(KeyboardStick::KP_0         ,SDLK_KP_0);
+  KeypadStick->AssociateKey(KeyboardStick::KP_1         ,SDLK_KP_1);
+  KeypadStick->AssociateKey(KeyboardStick::KP_2         ,SDLK_KP_2);
+  KeypadStick->AssociateKey(KeyboardStick::KP_3         ,SDLK_KP_3);
+  KeypadStick->AssociateKey(KeyboardStick::KP_4         ,SDLK_KP_4);
+  KeypadStick->AssociateKey(KeyboardStick::KP_5         ,SDLK_KP_5);
+  KeypadStick->AssociateKey(KeyboardStick::KP_6         ,SDLK_KP_6);
+  KeypadStick->AssociateKey(KeyboardStick::KP_7         ,SDLK_KP_7);
+  KeypadStick->AssociateKey(KeyboardStick::KP_8         ,SDLK_KP_8);
+  KeypadStick->AssociateKey(KeyboardStick::KP_9         ,SDLK_KP_9);
   KeypadStick->AssociateKey(KeyboardStick::KP_Divide    ,SDLK_KP_DIVIDE);
   KeypadStick->AssociateKey(KeyboardStick::KP_Times     ,SDLK_KP_MULTIPLY);
   KeypadStick->AssociateKey(KeyboardStick::KP_Minus     ,SDLK_KP_MINUS);
@@ -172,32 +172,25 @@ void SDL_FrontEnd::CreateDisplay(void)
   //sdl_initialized = true;
   truecolor       = machine->GTIA()->SuggestTrueColor();
 
-  if (truecolor) {
-    // Use a 32bpp screen here since this coincides with our
-    // "packed" pixel format.
-    screen = SDL_SetVideoMode(Width * PixelWidth,Height * PixelHeight,32,
-			      SDL_HWSURFACE |  
-			      ((FullScreen)?SDL_FULLSCREEN:0) |
-			      ((DoubleBuffer && usedbuf)?SDL_DOUBLEBUF:0));
+  SDL_Init(SDL_INIT_VIDEO);
+
+  window = SDL_CreateWindow("Atari++",
+                          SDL_WINDOWPOS_UNDEFINED,
+                          SDL_WINDOWPOS_UNDEFINED,
+                          Width * PixelWidth,Height * PixelHeight,
+			  ((FullScreen)?SDL_WINDOW_FULLSCREEN:0));
+
+  if(truecolor) {
+    screen = SDL_CreateRGBSurface(SDL_SWSURFACE, Width * PixelWidth,Height * PixelHeight, 32, 0, 0, 0, 0);
   } else {
-    screen = SDL_SetVideoMode(Width * PixelWidth,Height * PixelHeight,8,
-			      SDL_HWSURFACE | SDL_HWPALETTE | 
-			      ((FullScreen)?SDL_FULLSCREEN:0) |
-			      ((DoubleBuffer && usedbuf)?SDL_DOUBLEBUF:0));
+    screen = SDL_CreateRGBSurface(SDL_SWSURFACE, Width * PixelWidth,Height * PixelHeight, 8, 0, 0, 0, 0);
   }
+
   if (screen == NULL) {
       //sdl_initialized = false;
     Throw(ObjectDoesntExist,"SDL_FrontEnd::CreateDisplay",
 	  "Failed to setup the SDL display.");
   }
-  //
-  // Check whether we really have double buffering.
-  if ((DoubleBuffer && usedbuf) && (screen->flags & SDL_DOUBLEBUF) == 0) {
-    DoubleBuffer = false; // no.
-  }
-  //
-  // Set window and icon title.
-  SDL_WM_SetCaption(machine->WindowTitle(),"Atari++");
   //      
   colormap = cmap = machine->GTIA()->ActiveColorMap();
   //
@@ -216,23 +209,15 @@ void SDL_FrontEnd::CreateDisplay(void)
       cp->r = cmap->red;
       cp->g = cmap->green;
       cp->b = cmap->blue;
+      cp->a = 255;
       cp++;
       cmap++;
     }
-    if (SDL_SetColors(screen,colors,0,256) != 1) {
+    if(SDL_SetPaletteColors(screen->format->palette, colors, 0, 256) != 0) {
       Throw(ObjectDoesntExist,"SDL_FrontEnd::CreateDisplay",
 	    "Failed to setup the color palette for SDL");
     }
   }
-  // Disable the key repeat now.
-  if (SDL_EnableKeyRepeat(0,0) != 0) {
-    Throw(ObjectDoesntExist,"SDL_FrontEnd::CreateDisplay",
-	  "Failed to disable the keyboard repeat for SDL");
-  }
-  //
-  // We need unicode translation to ensure that we get shifted keys correctly
-  // for the frontend.
-  SDL_EnableUNICODE(1);      
   //
   // Enforce a full display refresh now
   fullrefresh          = true;
@@ -270,9 +255,9 @@ void SDL_FrontEnd::CreateDisplay(void)
     }
   }
   //
-  appstatus = SDL_GetAppState();
+  appstatus = SDL_GetWindowFlags(window);
   
-  keyboardfocus = (appstatus & SDL_APPINPUTFOCUS)?true:false;
+  keyboardfocus = (appstatus & SDL_WINDOW_INPUT_FOCUS)?true:false;
 
   buttons     = SDL_GetMouseState(&x,&y);
   MouseX      = x / PixelWidth;
@@ -452,7 +437,7 @@ void SDL_FrontEnd::EnableDoubleBuffer(bool enable)
     usedbuf = enable;
     CreateDisplay();
     SDL_ShowCursor(SDL_DISABLE);
-    SDL_WarpMouse(Uint16(x),Uint16(y));
+    SDL_WarpMouseInWindow(window, Uint16(x),Uint16(y));
     HandleEventQueue();
     //
     // Force-back the mouse button state. SDL doesn't notice if the
@@ -692,11 +677,13 @@ void SDL_FrontEnd::RebuildScreen(void)
   //
   if (fullrefresh) {
     // Make a complete refresh over all of the screen.
-    SDL_UpdateRects(screen,1,&full);
+    SDL_BlitSurface(screen, NULL, SDL_GetWindowSurface(window), NULL);
   } else {
-    if (rects)
-      SDL_UpdateRects(screen,rects,UpdateRects);
+    for(int i=0; i < rects; i++) {
+      SDL_BlitSurface(screen, &UpdateRects[i], SDL_GetWindowSurface(window), &UpdateRects[i]);
+    }
   }
+  SDL_UpdateWindowSurface(window);
   //
   // Undo the cursor shielding.
   if (showpointer && ShieldCursor)
@@ -706,7 +693,7 @@ void SDL_FrontEnd::RebuildScreen(void)
   if (usedbuf && DoubleBuffer) {
     UBYTE *tmp;
     PackedRGB *rgb;
-    SDL_Flip(screen);
+
     // Swap active and inactive buffers as well.
     tmp                  = ActiveFrame;
     ActiveFrame          = AlternateFrame;
@@ -952,6 +939,7 @@ void SDL_FrontEnd::HandleEventQueue(void)
     switch(event.type) {
     case SDL_KEYDOWN:
     case SDL_KEYUP:
+      if(event.key.repeat) continue;
       // Both key events. Handle them separately
       HandleKeyEvent(&event.key);
       break;
@@ -960,18 +948,23 @@ void SDL_FrontEnd::HandleEventQueue(void)
     case SDL_MOUSEBUTTONUP:
       HandleMouseEvent(&event);
       break;
-    case SDL_ACTIVEEVENT:
-      if (event.active.state == SDL_APPINPUTFOCUS) {
-	keyboardfocus = (event.active.gain)?true:false;
+    case SDL_WINDOWEVENT:
+      switch(event.window.event) {
+      case SDL_WINDOWEVENT_FOCUS_GAINED:
+        keyboardfocus = true;
+	break;
+      case SDL_WINDOWEVENT_FOCUS_LOST:
+        keyboardfocus = false;
+	break;
+      case SDL_WINDOWEVENT_RESIZED:
+      case SDL_WINDOWEVENT_EXPOSED:
+        EnforceFullRefresh();
+	break;
       }
       break;
     case SDL_QUIT:
       // Short and effective...
       machine->Quit() = true;
-      break;
-    case SDL_VIDEORESIZE:
-    case SDL_VIDEOEXPOSE:
-      EnforceFullRefresh();
       break;
     }
   }
@@ -983,7 +976,7 @@ void SDL_FrontEnd::HandleEventQueue(void)
 // emulation as required
 void SDL_FrontEnd::HandleKeyEvent(SDL_KeyboardEvent *event)
 {
-  SDLKey keysym;
+  int keysym;
   bool downflag;
   bool shift,control;
 
@@ -1006,11 +999,11 @@ void SDL_FrontEnd::HandleKeyEvent(SDL_KeyboardEvent *event)
   // Now check the keyboard symbol for validty
   if (keysym < 0x100 && keysym != 0x7f) { // Handle DEL separately
     UBYTE sym = 0xff; // invalid symbol
-    if (downflag && event->keysym.unicode >= 0x20 && event->keysym.unicode <= 0xff) {
+    if (downflag && event->keysym.sym >= 0x20 && event->keysym.sym <= 0xff) {
       // We must not try to translate control codes by means of unicode. I've no idea
       // why, but SDL generates for my german keyboard \e ("ESC") as unicode for
       // ^3 (= EOF on Atari).
-      sym = UBYTE(event->keysym.unicode);
+      sym = UBYTE(event->keysym.sym);
       // Another wierdo: If RALT is set, then the CTRL modifier might be
       // set erraneously. It is ignored here.
       if ((event->keysym.mod & KMOD_RALT) && control && (sym & 0x40)) {
@@ -1057,11 +1050,11 @@ void SDL_FrontEnd::HandleKeyEvent(SDL_KeyboardEvent *event)
     break;
   case SDLK_LALT:
     //case SDLK_RALT:
-  case SDLK_LSUPER:
-  case SDLK_RSUPER:
+  case SDLK_LGUI:
+  case SDLK_RGUI:
     keyboard->HandleSpecial(downflag,Keyboard::Atari,shift,control);
     break;
-  case SDLK_COMPOSE:
+  case SDLK_APPLICATION:
   case SDLK_F1:
     if (downflag) machine->LaunchMenu() = true;
     break;
@@ -1085,11 +1078,10 @@ void SDL_FrontEnd::HandleKeyEvent(SDL_KeyboardEvent *event)
     if (downflag) machine->ColdReset() = true;
     break;
   case SDLK_F8:
-  case SDLK_BREAK:
     keyboard->HandleSpecial(downflag,Keyboard::Break,shift,control);
     break;
   case SDLK_F9:
-  case SDLK_PRINT:
+  case SDLK_PRINTSCREEN:
     // Request a screen dump the next time.
     if (downflag) dump = true;
     break;
@@ -1253,7 +1245,7 @@ void SDL_FrontEnd::MousePosition(LONG &x,LONG &y,bool &button)
 void SDL_FrontEnd::SetMousePosition(LONG x,LONG y)
 {
   if (sdl_initialized) {
-    SDL_WarpMouse(Uint16(x * PixelWidth),Uint16(y * PixelHeight));
+    SDL_WarpMouseInWindow(window, Uint16(x * PixelWidth),Uint16(y * PixelHeight));
     MouseX = x;
     MouseY = y;
   }
@@ -1358,7 +1350,7 @@ void SDL_FrontEnd::MouseMoveStick::TransmitStates(bool paused,int width,int heig
 	//
 	if (x < (width  >> 2) || x > (width  - (width >> 2)) ||
 	    y < (height >> 2) || y > (height - (height >> 2))) {
-	  SDL_WarpMouse(width >> 1,height >> 1);
+//	  SDL_WarpMouseInWindow(window, width >> 1,height >> 1);
 	  lastx = width  >> 1;
 	  lasty = height >> 1;
 	}
@@ -1469,11 +1461,11 @@ void SDL_FrontEnd::SwitchScreen(bool foreground)
 {
   if (foreground) {
     if (fullscreen == false && FullScreen)
-      if (SDL_WM_ToggleFullScreen(screen))
+      if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN))
 	fullscreen = true;
   } else {
     if (fullscreen == true && FullScreen)
-      if (SDL_WM_ToggleFullScreen(screen))
+      if(SDL_SetWindowFullscreen(window, 0))
 	fullscreen = false;
   }
 }
@@ -1601,5 +1593,5 @@ void SDL_FrontEnd::ParseArgs(class ArgParser *args)
 ///
 
 /// 
-#endif // of if SDL/SDL.h available
+#endif // of if SDL.h available
 ///

@@ -17,14 +17,14 @@
 #include "chip.hpp"
 #include "vbiaction.hpp"
 #include "gameport.hpp"
-#if HAVE_SDL_SDL_H && HAVE_SDL_JOYSTICKOPEN
-#include <SDL/SDL.h>
+#if HAVE_SDL2_SDL_H && HAVE_SDL_JOYSTICKOPEN
+#include <SDL2/SDL.h>
 #endif
 ///
 
 /// Class SDLAnalog
 // This class implements the interface towards SDL analog joysticks
-#if HAVE_SDL_SDL_H && HAVE_SDL_JOYSTICKOPEN
+#if HAVE_SDL2_SDL_H && HAVE_SDL_JOYSTICKOPEN
 class SDLAnalog : public Chip, public VBIAction, public GamePort, public SDLClient {
   //
   // The unit number of the device. This is the last letter of
